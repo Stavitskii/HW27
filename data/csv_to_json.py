@@ -11,7 +11,16 @@ def convert_file(csv_file, json_file, model_name):
     result = []
     with open(csv_file, encoding='utf-8') as csv_f:
         for row in csv.DictReader(csv_f):
-            to_add = {'model': model_name, 'pk': int(row['ID'] if 'Id' in row else row['id'])}
+            to_add = {'model': model_name, 'pk': int(row['Id'] if 'Id' in row else row['id'])}
+            if 'Id' in row:
+                del row['Id']
+            elif 'id' in row:
+                del row['id']
+            if 'is_published' in row:
+                if row['is_published'] == 'TRUE':
+                    row['is_published'] = True
+                else:
+                    row['is_published'] = False
             to_add['fields'] = row
             result.append(to_add)
         with open(json_file, 'w', encoding='utf-8') as json_f:
@@ -19,3 +28,4 @@ def convert_file(csv_file, json_file, model_name):
 
 
 convert_file(DATA_CATEGORIES, JSON_CATEGORIES, 'ads.category')
+convert_file(DATA_ADS, JSON_ADS, 'ads.ad')

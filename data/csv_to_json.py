@@ -21,6 +21,9 @@ def convert_file(csv_file, json_file, model_name):
                     row['is_published'] = True
                 else:
                     row['is_published'] = False
+            if 'price' in row:
+                row['price'] = int(row['price'])
+
             to_add['fields'] = row
             result.append(to_add)
         with open(json_file, 'w', encoding='utf-8') as json_f:
